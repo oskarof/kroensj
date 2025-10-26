@@ -1,7 +1,8 @@
-import React from 'react';
+import { ProfilePage } from '../components/ProfilePage';
 
-const LoggInn: React.FC = () => {
-  return <h1>Logg inn</h1>;
-};
+function LoggInn() {
+  return <ProfilePage />;
+}
 
 export default LoggInn;
+
