@@ -1,6 +1,6 @@
 import React from "react";
 
-interface QuickNavCardProps {
+interface CardProps {
   href: string;
   icon: React.ReactNode;
   title: string;
@@ -8,7 +8,7 @@ interface QuickNavCardProps {
   className?: string;
 }
 
-export const QuickNavCard: React.FC<QuickNavCardProps> = ({ href, icon, title, description, className }) => (
+export const Card: React.FC<CardProps> = ({ href, icon, title, description, className }) => (
   <a
     href={href}
     className={`group transform rounded-lg bg-white p-6 shadow-md transition-all duration-200 hover:scale-105 hover:shadow-lg ${className ?? ''}`}

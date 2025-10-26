@@ -1,8 +1,8 @@
 import React from 'react';
 import { HeroSection } from "../components/HeroSection";
 import { SectionTitle } from "../components/SectionTitle";
-import { QuickNavGrid } from "../components/QuickNavGrid";
-import type { QuickNavItem } from "../components/QuickNavGrid";
+import { CardGrid } from "../components/CardGrid";
+import type { CardItem } from "../components/CardGrid";
 import { User, Calendar, Star, DollarSign, Info, Mail } from "lucide-react";
 // import { useYogoWidget } from '../hooks/useYogoWidget';
 
@@ -10,7 +10,7 @@ const LandingPage: React.FC = () => {
   // const calendarRef = useYogoWidget('.yogo-calendar');
   // const eventsRef = useYogoWidget('.yogo-events');
 
-  const quickNavItems: QuickNavItem[] = [
+  const cardItems: CardItem[] = [
     {
       href: "/bli-medlem",
       icon: <User className="h-8 w-8" />, 
@@ -79,7 +79,7 @@ const LandingPage: React.FC = () => {
           <SectionTitle>
             Utforsk <span className="text-primary-600">Krønsj</span>
           </SectionTitle>
-          <QuickNavGrid items={quickNavItems} />
+          <CardGrid items={cardItems} />
         </div>
       </section>
     </>

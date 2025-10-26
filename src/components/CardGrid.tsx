@@ -1,7 +1,7 @@
 import React from "react";
-import { QuickNavCard } from "./QuickNavCard";
+import { Card } from "./Card";
 
-export interface QuickNavItem {
+export interface CardItem {
   href: string;
   icon: React.ReactNode;
   title: string;
@@ -9,15 +9,15 @@ export interface QuickNavItem {
   className?: string;
 }
 
-interface QuickNavGridProps {
-  items: QuickNavItem[];
+interface CardGridProps {
+  items: CardItem[];
   className?: string;
 }
 
-export const QuickNavGrid: React.FC<QuickNavGridProps> = ({ items, className }) => (
+export const CardGrid: React.FC<CardGridProps> = ({ items, className }) => (
   <div className={`grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 ${className ?? ''}`}>
     {items.map((item, idx) => (
-      <QuickNavCard key={item.href + idx} {...item} />
+      <Card key={item.href + idx} {...item} />
     ))}
   </div>
 );
