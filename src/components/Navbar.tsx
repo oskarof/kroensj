@@ -49,7 +49,7 @@ const Navbar = () => {
       </NavigationMenu>
       <div className="flex items-center gap-4 px-4 md:px-6">
         <Button asChild variant="outline">
-          <Link to="/logg-inn">Logg inn</Link>
+          <Link to="/logg-inn">Min side</Link>
         </Button>
       </div>
     </header>
