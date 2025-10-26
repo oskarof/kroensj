@@ -1,12 +1,12 @@
 import { Route, Routes } from "react-router";
 import LandingPage from "./pages/LandingPage";
-import BliMedlem from "./pages/BliMedlem";
-import Timeplan from "./pages/Timeplan";
-import Events from "./pages/Events";
-import Priser from "./pages/Priser";
-import OmOss from "./pages/OmOss";
-import Kontakt from "./pages/Kontakt";
-import LoggInn from "./pages/LoggInn";
+import BliMedlem from "./pages/JoinPage";
+import Timeplan from "./pages/CalendarPage";
+import Events from "./pages/EventPage";
+import Priser from "./pages/PricePage";
+import OmOss from "./pages/AboutPage";
+import Kontakt from "./pages/ContactPage";
+import LoggInn from "./pages/ProfilePage";
 import Navbar from "./components/Navbar";
 
 function App() {
