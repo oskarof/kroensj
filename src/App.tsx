@@ -25,6 +25,11 @@ function App() {
           <Route path="/logg-inn" element={<LoggInn />} />
         </Routes>
       </main>
+      {/* Permanent hidden homes for Yogo widgets */}
+      <div id="yogo-widget-homes" style={{ display: 'none' }}>
+        <div id="yogo-calendar-home" className="yogo-calendar"></div>
+        <div id="yogo-events-home" className="yogo-events"></div>
+      </div>
     </div>
   );
 }
