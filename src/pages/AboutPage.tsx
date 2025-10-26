@@ -2,6 +2,7 @@ import React from 'react';
 import { ContentList } from '../components/ContentList';
 import { ContentText } from '../components/ContentText';
 import { Stats } from '../components/Stats';
+import { Title } from '../components/Title';
 import { Music, Disc3, Heart, Users } from 'lucide-react';
 
 
@@ -59,10 +60,12 @@ const aboutStats = [
 ];
 
 
+
 const OmOss: React.FC = () => (
-  <>
+  <div className="pt-16 px-4 md:px-8 max-w-7xl mx-auto">
+    <Title>OM KRØNSJ</Title>
     <ContentText
-      heading={<span className="text-center block">Om <span className="text-primary-600">Krønsj</span></span>}
+      heading={""}
       text={aboutText}
       image="https://static.wixstatic.com/media/390aa3_48e43adb22a0411ea2845769000d6f54~mv2.jpg"
       imageAlt="Krønsj Training Studio - moderne treningsstudio interiør"
@@ -77,7 +80,7 @@ const OmOss: React.FC = () => (
     <div className="mt-20">
       <Stats stats={aboutStats} />
     </div>
-  </>
+  </div>
 );
 
 export default OmOss;
