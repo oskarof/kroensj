@@ -1,5 +1,5 @@
 import React from 'react';
-import { Hero } from "../components/Hero";
+import { HeroSection } from "../components/HeroSection";
 import { SectionTitle } from "../components/SectionTitle";
 import { QuickNavGrid } from "../components/QuickNavGrid";
 import type { QuickNavItem } from "../components/QuickNavGrid";
@@ -51,8 +51,30 @@ const LandingPage: React.FC = () => {
 
   return (
     <>
-      <Hero />
-      <section className="bg-gray-50 py-20">
+      <HeroSection
+        title="I hjertet av Oslo"
+        highlight="Krønsj beveger deg!"
+        subtitle="Gruppetimer, flinke instruktører og unike fasiliteter."
+        backgroundImage="https://static.wixstatic.com/media/390aa3_c9182ca2622b435fa4397118e0872ecf~mv2.jpg/v1/fill/w_3044,h_1910,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/390aa3_c9182ca2622b435fa4397118e0872ecf~mv2.jpg"
+        scrollToId="classes"
+        buttons={[
+          {
+            text: "Bli medlem",
+            href: "/bli-medlem",
+            variant: "primary",
+            className: "hover:-translate-y-1",
+            icon: <User className="ml-2 h-5 w-5" />,
+          },
+          {
+            text: "Timeplan",
+            href: "/timeplan",
+            variant: "secondary",
+            className: "hover:-translate-y-1",
+            icon: <Calendar className="ml-2 h-5 w-5" />,
+          },
+        ]}
+      />
+      <section className="bg-gray-50 py-20" id="classes">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionTitle>
             Utforsk <span className="text-primary-600">Krønsj</span>
