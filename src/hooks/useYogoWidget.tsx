@@ -1,86 +1,117 @@
 import { useEffect } from 'react';
 
-// Define types for the global window properties
 declare global {
   interface Window {
     YOGO_APP_SERVER: string;
     YOGO_CLIENT_ID: string;
-    YOGO_WIDGETS_LOADED?: boolean; // Flag to check if scripts are loaded
-    renderYogoWidget: (selector: string, widget: string) => void;
+    YOGO_WIDGETS_LOADED?: boolean;
   }
 }
 
-// The main loader function, separated for clarity
-const loadYogoScripts = (callback: () => void) => {
-  // 1. Set the required global configuration variables
+let areCssAndConfigLoaded = false;
+const YOGO_WIDGET_SCRIPT_ID = 'yogo-widget-main-script';
+const YOGO_CACHE_BUSTER_SCRIPT_ID = 'yogo-cache-buster-script';
+
+const loadPrerequisites = (onComplete: () => void) => {
+  if (areCssAndConfigLoaded) {
+    console.log('[YOGO] Prerequisites already loaded.');
+    onComplete();
+    return;
+  }
+
+  console.log('[YOGO] Loading prerequisites (CSS and Config).');
   window.YOGO_APP_SERVER = 'kroensj.yogo.no';
   window.YOGO_CLIENT_ID = '1413';
 
-  // 2. Replicate the dynamic loading logic
   const baseUrl = `https://${window.YOGO_APP_SERVER}/widgets/`;
   const xhr = new XMLHttpRequest();
 
   xhr.onloadend = function () {
     if (xhr.status !== 200) {
-      console.error('Failed to load Yogo filelist.json');
+      console.error(`[YOGO] Failed to load filelist.json. Status: ${xhr.status}`);
       return;
     }
     try {
       const filelist = JSON.parse(xhr.responseText);
       const head = document.getElementsByTagName('head')[0];
 
-      // Load CSS files
       filelist.css.forEach(function (file: string) {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = baseUrl + file;
-        head.appendChild(link);
-      });
-
-      // Load JS files sequentially
-      const loadScript = (index: number) => {
-        if (index >= filelist.js.length) {
-          // All scripts are loaded
-          window.YOGO_WIDGETS_LOADED = true;
-          callback();
-          return;
+        const cssUrl = baseUrl + file;
+        if (!document.querySelector(`link[href="${cssUrl}"]`)) {
+          console.log(`[YOGO] Creating <link> for CSS: ${cssUrl}`);
+          const link = document.createElement('link');
+          link.rel = 'stylesheet';
+          link.href = cssUrl;
+          head.appendChild(link);
         }
-
-        const script = document.createElement('script');
-        script.src = baseUrl + filelist.js[index];
-        script.onload = () => loadScript(index + 1);
-        script.onerror = () => console.error(`Failed to load script: ${filelist.js[index]}`);
-        head.appendChild(script);
-      };
-
-      loadScript(0); // Start loading the first script
+      });
+      
+      areCssAndConfigLoaded = true;
+      console.log('[YOGO] Prerequisites loaded successfully.');
+      onComplete();
     } catch (e) {
-      console.error('Error parsing Yogo filelist.json', e);
+      console.error('[YOGO] Error parsing filelist.json', e);
     }
   };
 
-  xhr.open('GET', `${baseUrl}filelist.json?cachebuster=${Date.now()}`);
+  const url = `${baseUrl}filelist.json?cachebuster=${Date.now()}`;
+  xhr.open('GET', url);
   xhr.send();
 };
 
-// The custom hook
-export const useYogoWidget = (selector: string, widget: string) => {
+const forceRunWidgetScript = () => {
+  // TRICK: Delete the flag that the script uses to check if it has run before.
+  if (window.YOGO_WIDGETS_LOADED) {
+    console.log('[YOGO] Deleting YOGO_WIDGETS_LOADED flag to allow re-execution.');
+    delete window.YOGO_WIDGETS_LOADED;
+  }
+
+  // Remove the old scripts to ensure they re-execute
+  document.getElementById(YOGO_CACHE_BUSTER_SCRIPT_ID)?.remove();
+  document.getElementById(YOGO_WIDGET_SCRIPT_ID)?.remove();
+  console.log('[YOGO] Removed old widget scripts.');
+
+  // Re-add the scripts in order. The browser will use cache but re-execute them.
+  const baseUrl = `https://${window.YOGO_APP_SERVER}/widgets/`;
+  const head = document.head;
+
+  // 1. Add cache-buster-activated.js
+  const cacheBusterScript = document.createElement('script');
+  cacheBusterScript.id = YOGO_CACHE_BUSTER_SCRIPT_ID;
+  cacheBusterScript.src = `${baseUrl}js/cache-buster-activated.js`;
+  
+  // 2. Add yogo-widgets.js, which runs after the first script
+  const widgetScript = document.createElement('script');
+  widgetScript.id = YOGO_WIDGET_SCRIPT_ID;
+  widgetScript.src = `${baseUrl}js/yogo-widgets.js`;
+
+  cacheBusterScript.onload = () => {
+    console.log('[YOGO] Cache buster script re-executed.');
+    head.appendChild(widgetScript);
+  };
+  
+  widgetScript.onload = () => {
+    console.log('[YOGO] Main widget script has been re-executed.');
+  };
+
+  head.appendChild(cacheBusterScript);
+};
+
+export const useYogoWidget = (selector: string) => {
   useEffect(() => {
-    const renderWidget = () => {
-      if (window.renderYogoWidget) {
-        window.renderYogoWidget(selector, widget);
-      } else {
-        // This might happen if the component mounts before scripts are fully ready
-        setTimeout(() => renderWidget(), 100);
+    console.log(`[YOGO Hook] Activating for selector: '${selector}'`);
+    
+    loadPrerequisites(() => {
+      // Once CSS/Config is ready, force the JS scripts to run.
+      forceRunWidgetScript();
+    });
+
+    return () => {
+      console.log(`[YOGO Hook] Cleaning up widget for selector: '${selector}'`);
+      const element = document.querySelector(selector);
+      if (element) {
+        element.innerHTML = '';
       }
     };
-
-    if (window.YOGO_WIDGETS_LOADED) {
-      // If scripts are already loaded, just render the widget
-      renderWidget();
-    } else {
-      // Otherwise, load the scripts and then render
-      loadYogoScripts(renderWidget);
-    }
-  }, [selector, widget]);
+  }, [selector]);
 };
