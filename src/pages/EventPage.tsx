@@ -1,10 +1,11 @@
 import React from 'react';
 import YogoEvents from '@/components/YogoEvents';
+import Title from '../components/Title'
 
 const Events: React.FC = () => {
   return (
     <>
-      <h1>Events</h1>;
+      <Title title={'Events'}></Title>;
       < YogoEvents />
     </>
   )

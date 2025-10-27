@@ -2,7 +2,7 @@ import React from 'react';
 import { ContentList } from '../components/ContentList';
 import { ContentText } from '../components/ContentText';
 import { Stats } from '../components/Stats';
-import { Title } from '../components/Title';
+import Title from '../components/Title';
 import { Music, Disc3, Heart, Users } from 'lucide-react';
 
 
@@ -61,9 +61,10 @@ const aboutStats = [
 
 
 
+
 const OmOss: React.FC = () => (
-  <div className="pt-16 px-4 md:px-8 max-w-7xl mx-auto">
-    <Title>OM KRØNSJ</Title>
+  <div className="px-4 md:px-8 max-w-7xl mx-auto">
+    <Title title={'Krønsj for alle'} />
     <ContentText
       heading={""}
       text={aboutText}

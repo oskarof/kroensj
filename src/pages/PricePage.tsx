@@ -1,7 +1,8 @@
 import React from 'react';
+import Title from '../components/Title'
 
 const Priser: React.FC = () => {
-  return <h1>Priser</h1>;
+  return <Title title={'Priser'}></Title>;
 };
 
 export default Priser;

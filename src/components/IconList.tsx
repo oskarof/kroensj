@@ -9,7 +9,7 @@ interface IconListProps {
 
 export const IconList: React.FC<IconListProps> = ({ icon, title, description, colorClass }) => (
   <div className="flex items-start">
-    <div className={`mr-4 flex-shrink-0 rounded-lg p-3 ${colorClass ?? "bg-primary-100"}`}>
+    <div className={`mr-4 shrink-0 rounded-lg p-3 ${colorClass ?? "bg-primary-100"}`}>
       {icon}
     </div>
     <div>
